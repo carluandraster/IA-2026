@@ -1,0 +1,37 @@
+name: Evaluacion Automatizada de Talleres (PR)
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - '02-Algoritmos-Geneticos/**'
+  push:
+    branches: [ main ]
+    paths:
+      - '02-Algoritmos-Geneticos/**'
+  workflow_dispatch:
+
+jobs:
+  evaluar-taller-genetico:
+    name: Evaluacion - Taller Algoritmos Geneticos
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar codigo del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar entorno Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Instalar dependencias necesarias
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy matplotlib pygad pytest
+
+      - name: Ejecutar suite de pruebas de Algoritmos Geneticos
+        run: |
+          cd 02-Algoritmos-Geneticos
+          python test/test_taller_genetico.py Taller_Algoritmos_Geneticos.ipynb
